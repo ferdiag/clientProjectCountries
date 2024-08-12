@@ -14,14 +14,12 @@ const shuffleArray = (array) => {
   }
   return updatedArray;
 };
-
 function App() {
   const [countries, setCountries] = useState([]);
   const [isRunning, setIsRunning] = useState(false);
   const [questionType, setQuestionType] = useState("country");
-  const [questionCounter, setQuestionCounter] = useState(0);
+  const [counter, setCounter] = useState(0);
   const [points, setPoints] = useState(0);
-
   useEffect(() => {
     axios
       .get("http://localhost:3001/")
@@ -43,10 +41,10 @@ function App() {
         <>
           <PointsElement points={points} />
           <Game
-            setCounter={setQuestionCounter}
+            setCounter={setCounter}
             setQuestionType={setQuestionType}
             questionType={questionType}
-            counter={questionCounter}
+            counter={counter}
             countries={countries}
             points={points}
             setPoints={setPoints}
