@@ -6,28 +6,23 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Leaderboard from "./pages/Leaderboard";
 import Dialog from "./components/Dialog";
+import { shuffleArray } from "./utils/helpers/shuffleArray";
+import { useDispatch } from "react-redux";
+import { setCountries } from "./context/slice";
 /**
  * Shuffles an array in place.
  * @param {Array} array - The array to shuffle.
  * @returns {Array} The shuffled array.
  */
-const shuffleArray = (array) => {
-  const updatedArray = [...array];
-  for (let i = updatedArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [updatedArray[i], updatedArray[j]] = [updatedArray[j], updatedArray[i]];
-  }
-  return updatedArray;
-};
 
 /**
  * Main application component.
  * @returns {JSX.Element} The main component rendering the game.
  */
 function App() {
-  const [countries, setCountries] = useState([]);
   const [displayDialog, setDisplayDialog] = useState(false);
   const [name, setName] = useState("player 1");
+  const dispatch = useDispatch();
   /**
    * Fetches the list of countries from the server and shuffles them.
    */
@@ -37,7 +32,7 @@ function App() {
       .then((response) => {
         const shuffledArray = shuffleArray(response.data);
         console.log(response);
-        setCountries(shuffledArray);
+        dispatch(setCountries(shuffledArray));
       })
       .catch((error) => console.error("Fehler beim Abrufen der Daten:", error));
   }, []);
@@ -54,13 +49,11 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/Game" element={<Game />} />
           <Route
-            path="/Game"
-            element={
-              <Game countries={countries} setDisplayDialog={setDisplayDialog} />
-            }
+            path="/Leaderboard"
+            element={<Leaderboard setName={setName} />}
           />
-          <Route path="/Leaderboard" element={<Leaderboard />} />
         </Routes>
       </Router>
       {displayDialog && (
