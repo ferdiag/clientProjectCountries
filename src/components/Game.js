@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import PointsElement from "./PointsElement";
+import LivesElement from "./LivesElement";
+import useCurrentCountry from "../hooks/useShuffleCountry";
 
 /**
  * Game component that handles the core gameplay logic.
@@ -11,39 +14,13 @@ import React, { useEffect, useState } from "react";
  * @param {Function} setLives - Function to update the player's remaining lives.
  * @returns {JSX.Element} The game interface where users can interact with questions.
  */
-const Game = ({
-  countries,
-  counter,
-  setCounter,
-  questionType,
-  setQuestionType,
-  setPoints,
-  setLives,
-}) => {
-  const [currentCountry, setCurrentCountry] = useState(null);
-
-  /**
-   * useEffect hook that runs every time the `counter` or `setCurrentCountry` changes.
-   * It selects the current country and randomly generates three incorrect options.
-   * The correct answer is randomly inserted among these options.
-   */
-  useEffect(() => {
-    const country = { ...countries[counter] };
-    let it = 0;
-    let opps = [];
-    while (it < 3) {
-      const randomNumber = Math.floor(Math.random() * countries.length);
-      const isInOpps = opps.includes(randomNumber);
-      if (!isInOpps) {
-        opps = [...opps, randomNumber];
-        it += 1;
-      }
-    }
-    const indexOfCorrectAnswer = Math.floor(Math.random() * 4);
-    opps.splice(indexOfCorrectAnswer, 0, counter);
-    setCurrentCountry({ ...country, opps });
-  }, [counter, setCurrentCountry, countries]);
-
+const Game = ({ countries, setDisplayDialog }) => {
+  const [counter, setCounter] = useState(0);
+  const [points, setPoints] = useState(0);
+  const [questionType, setQuestionType] = useState("country");
+  const [lives, setLives] = useState(3);
+  const currentCountry = useCurrentCountry(countries, counter);
+  console.log(currentCountry);
   /**
    * Updates the question type and counter.
    * If the question type is "capital", it resets to "country" and increments the counter.
@@ -69,18 +46,21 @@ const Game = ({
       questionType === "country" ? setQuestionType("capital") : setStates();
       return;
     }
+    if (lives - 1 === 0 || counter === countries.length - 1)
+      setDisplayDialog(true);
     setLives((currentLives) => currentLives - 1);
   };
 
   /**
    * Placeholder function to potentially display a flag in the future.
    */
-  const displayFlag = () => {};
 
   return (
     <div>
       {currentCountry ? (
         <>
+          <PointsElement points={points} />
+          <LivesElement lives={lives} />
           <div>
             {questionType === "country"
               ? currentCountry.country
