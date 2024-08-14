@@ -2,7 +2,7 @@ import React from "react";
 
 const Dialog = ({ name, setName, onClose }) => {
   const handleSave = (e) => {
-    // Speichern-Logik hier
+
   };
 
   const handleChange = (e) => {

@@ -7,8 +7,8 @@ import Home from "./pages/Home";
 import Leaderboard from "./pages/Leaderboard";
 import Dialog from "./components/Dialog";
 import { shuffleArray } from "./utils/helpers/shuffleArray";
-import { useDispatch } from "react-redux";
-import { setCountries } from "./context/slice";
+import { useDispatch, useSelector } from "react-redux";
+import { setCountries, setDisplayDialog } from "./context/slice";
 /**
  * Shuffles an array in place.
  * @param {Array} array - The array to shuffle.
@@ -20,18 +20,17 @@ import { setCountries } from "./context/slice";
  * @returns {JSX.Element} The main component rendering the game.
  */
 function App() {
-  const [displayDialog, setDisplayDialog] = useState(false);
   const [name, setName] = useState("player 1");
   const dispatch = useDispatch();
-  /**
-   * Fetches the list of countries from the server and shuffles them.
-   */
+
+  const { displayDialog } = useSelector((state) => state.game);
+
   useEffect(() => {
     axios
       .get("http://localhost:3001/")
       .then((response) => {
         const shuffledArray = shuffleArray(response.data);
-        console.log(response);
+        console.log(shuffledArray);
         dispatch(setCountries(shuffledArray));
       })
       .catch((error) => console.error("Fehler beim Abrufen der Daten:", error));

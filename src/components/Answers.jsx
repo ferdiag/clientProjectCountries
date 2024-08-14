@@ -5,8 +5,10 @@ import {
     incrementCounter,
     setQuestionType,
     setDisplayDialog,
+    setCurrentCountry,
 } from '../context/slice';
 import { useDispatch, useSelector } from 'react-redux';
+import { getLocalCountry } from '../utils/helpers/getLocalCountry';
 
 const Answers = () => {
     const dispatch = useDispatch()
@@ -17,24 +19,35 @@ const Answers = () => {
         countries,
         questionType,
     } = useSelector((state) => state.game);
-
     //set the current country state
 
-    const setQountryTypes = () => {
+    const answerCountry = () => {
         dispatch(setQuestionType("country"))
         dispatch(incrementCounter())
+        const next = counter + 1
+        const currentCountryLocal = getLocalCountry(countries, next)
+        dispatch(setCurrentCountry(currentCountryLocal))
     };
+    const answerCapital = () => {
+        dispatch(setQuestionType("capital"))
+
+    }
     const handleUserChoice = (e) => {
         e.preventDefault();
+        console.log(e.target.name, counter)
         if (parseInt(e.target.name, 10) === counter) {
             dispatch(incrementPoints());
-            questionType === "country" ? dispatch(setQuestionType("capital")) : setQountryTypes();
+
+            questionType === "country" ? answerCapital() : answerCountry();
             return;
         }
-        if (lives - 1 === 0 || counter === countries.length - 1) { dispatch(setDisplayDialog(true)) }
+        if (lives - 1 === 0 || counter === countries.length - 1) {
+            dispatch(setDisplayDialog(true))
+        }
         dispatch(decrementLives())
-    };
 
+    };
+    console.log(currentCountry)
     const opps = currentCountry?.opps.map((indexOfCountry, index) => (
         <button
             name={indexOfCountry}

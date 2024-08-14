@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useCurrentCountry from "../hooks/useShuffleCountry";
 import OverHead from "./OverHead";
 import Question from "./Question";
@@ -7,8 +7,7 @@ import { useSelector } from "react-redux";
 
 
 const Game = () => {
-  const { currentCountry, countries, counter } = useSelector(state => state.game)
-  useCurrentCountry();
+  const { currentCountry } = useSelector(state => state.game)
   return (
     <div>
       {currentCountry ? (

@@ -1,6 +1,8 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
-const Question = ({ questionType }) => {
+const Question = () => {
+    const { questionType } = useSelector(state => state.game)
     return (
         <div>
             Wie heißt
