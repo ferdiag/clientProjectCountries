@@ -1,8 +1,10 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
-const Leaderboard = () => {
+const Leaderboard = ({ name }) => {
+    const { points } = useSelector(state => state.game)
     return (
-        <div>Leaderboard</div>
+        <div><div>{name}</div><div>{points}</div></div>
     )
 }
 

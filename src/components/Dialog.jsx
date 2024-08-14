@@ -1,8 +1,17 @@
 import React from "react";
-
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {
+  setDisplayDialog,
+} from '../context/slice';
 const Dialog = ({ name, setName, onClose }) => {
-  const handleSave = (e) => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
+  const handleSave = (e) => {
+    dispatch(setDisplayDialog(false));
+
+    navigate("/Leaderboard")
   };
 
   const handleChange = (e) => {

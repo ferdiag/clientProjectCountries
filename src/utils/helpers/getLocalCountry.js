@@ -16,6 +16,5 @@ export const getLocalCountry = (countries, counter) => {
     opps.splice(indexOfCorrectAnswer, 0, counter);
     currentCountryLocal = { ...country, opps };
   }
-  console.log(currentCountryLocal);
   return currentCountryLocal;
 };

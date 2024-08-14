@@ -49,15 +49,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Game" element={<Game />} />
-          <Route
-            path="/Leaderboard"
-            element={<Leaderboard setName={setName} />}
-          />
+          <Route path="/Leaderboard" element={<Leaderboard name={name} />} />
         </Routes>
+        {displayDialog && (
+          <Dialog setName={setName} name={name} onClose={handleCloseDialog} />
+        )}
       </Router>
-      {displayDialog && (
-        <Dialog setName={setName} name={name} onClose={handleCloseDialog} />
-      )}
     </div>
   );
 }

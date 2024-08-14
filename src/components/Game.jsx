@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useCurrentCountry from "../hooks/useShuffleCountry";
 import OverHead from "./OverHead";
 import Question from "./Question";
 import Answers from "./Answers";

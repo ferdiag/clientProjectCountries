@@ -34,7 +34,6 @@ const Answers = () => {
     }
     const handleUserChoice = (e) => {
         e.preventDefault();
-        console.log(e.target.name, counter)
         if (parseInt(e.target.name, 10) === counter) {
             dispatch(incrementPoints());
 
@@ -47,7 +46,7 @@ const Answers = () => {
         dispatch(decrementLives())
 
     };
-    console.log(currentCountry)
+
     const opps = currentCountry?.opps.map((indexOfCountry, index) => (
         <button
             name={indexOfCountry}
