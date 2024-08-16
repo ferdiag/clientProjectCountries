@@ -4,16 +4,16 @@ import LivesElement from './LivesElement';
 import Flag from './Flag';
 import { useSelector } from 'react-redux';
 
-const OverHead = () => {
+const Head = ({ currentCountry, points, lives }) => {
     const { questionType } = useSelector(state => state.game)
 
     return (
-        <> <PointsElement />
-            <LivesElement />
-            {questionType === "country" && <Flag />}
+        <> <PointsElement points={points} />
+            <LivesElement lives={lives} />
+            {questionType === "country" && <Flag currentCountry={currentCountry} />}
         </>
     )
 
 };
 
-export default OverHead
+export default Head

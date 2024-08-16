@@ -8,7 +8,11 @@ import Leaderboard from "./pages/Leaderboard";
 import Dialog from "./components/Dialog";
 import { shuffleArray } from "./utils/helpers/shuffleArray";
 import { useDispatch, useSelector } from "react-redux";
-import { setCountries, setDisplayDialog } from "./context/slice";
+import {
+  setCountries,
+  setDisplayDialog,
+  setLeaderBoard,
+} from "./context/slice";
 /**
  * Shuffles an array in place.
  * @param {Array} array - The array to shuffle.
@@ -29,12 +33,14 @@ function App() {
     axios
       .get("http://localhost:3001/")
       .then((response) => {
-        const shuffledArray = shuffleArray(response.data);
-        console.log(shuffledArray);
+        const { data, leaderboard } = response.data;
+        const shuffledArray = shuffleArray(data);
+
         dispatch(setCountries(shuffledArray));
+        dispatch(setLeaderBoard(leaderboard));
       })
       .catch((error) => console.error("Fehler beim Abrufen der Daten:", error));
-  }, []);
+  }, [dispatch]);
 
   /**
    * Handles the start button click event.

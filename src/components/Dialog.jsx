@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   setDisplayDialog,
 } from '../context/slice';
+import axios from "axios";
 const Dialog = ({ name, setName, onClose }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()

@@ -16,9 +16,16 @@ const Home = () => {
 
     const handleStart = (e) => {
         e.preventDefault();
-        const currentCountryLocal = getLocalCountry(countries, counter)
-        dispatch(setCurrentCountry(currentCountryLocal))
-        navigate('Game')
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('index', 0);
+        url.searchParams.set('points', 0);
+        url.searchParams.set('lives', 3);
+        // Optional: Logge die neue URL
+        console.log(`New URL: ${url}`);
+
+        // Leite auf die Seite `/Game` mit dem Parameter `next=0` um
+        navigate(`/Game${url.search}`);
     };
     return (
         <div>
