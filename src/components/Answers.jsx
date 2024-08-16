@@ -21,7 +21,7 @@ const Answers = ({ currentCountry, lives }) => {
 
     //set the current country state
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const answerCountry = () => {
         dispatch(setQuestionType("country"))

@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLocalCountry } from '../utils/helpers/getLocalCountry';
 import { setCurrentCountry } from '../context/slice';
+import useParams from '../utils/helpers/handleParams';
+import handleParams from '../utils/helpers/handleParams';
 
 const Home = () => {
     const {
@@ -12,20 +14,10 @@ const Home = () => {
     } = useSelector((state) => state.game);
 
     const navigate = useNavigate()
-    const dispatch = useDispatch(state => state.game)
 
     const handleStart = (e) => {
         e.preventDefault();
-
-        const url = new URL(window.location.href);
-        url.searchParams.set('index', 0);
-        url.searchParams.set('points', 0);
-        url.searchParams.set('lives', 3);
-        // Optional: Logge die neue URL
-        console.log(`New URL: ${url}`);
-
-        // Leite auf die Seite `/Game` mit dem Parameter `next=0` um
-        navigate(`/Game${url.search}`);
+        handleParams({ navigate, counter: 0, points: 0, lives: 3, country: countries[0].country, questionType: "country" })
     };
     return (
         <div>
