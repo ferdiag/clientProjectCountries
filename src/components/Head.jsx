@@ -4,8 +4,7 @@ import LivesElement from './LivesElement';
 import Flag from './Flag';
 import { useSelector } from 'react-redux';
 
-const Head = ({ currentCountry, points, lives }) => {
-    const { questionType } = useSelector(state => state.game)
+const Head = ({ currentCountry, points, lives, questionType }) => {
 
     return (
         <> <PointsElement points={points} />

@@ -2,22 +2,18 @@ import React, { useEffect, useState } from "react";
 import Head from "../components/Head";
 import Question from "../components/Question";
 import Answers from "../components/Answers";
-import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from 'react-router-dom';
+import { useSelector } from "react-redux";
 import { getLocalCountry } from "../utils/helpers/getLocalCountry";
+import getLocalStorage from "../utils/helpers/getLocalStorage";
 
 const Game = () => {
-  const [searchParams] = useSearchParams(); // Hook, um die Query-Parameter abzurufen
-  const index = searchParams.get('index'); // Holt den Wert des 'index'-Parameters
-  const points = searchParams.get('points'); // Holt den Wert des 'index'-Parameters
-  const lives = searchParams.get('lives'); // Holt den Wert des 'index'-Parameters
-  const countryParams = searchParams.get('country'); // Holt den Wert des 'index'-Parameters
+  const { index, points, lives, country, questionType } = getLocalStorage()
+  const [key, setKey] = useState(0);
 
   const { countries } = useSelector(state => state.game)
-  const [currentCountry, setCurrentCountry] = useState()
-
+  const [currentCountry, setCurrentCountry] = useState(null)
   useEffect(() => {
-    const currentCountry = getLocalCountry(countries, index, countryParams)
+    const currentCountry = getLocalCountry(countries, index, country)
     setCurrentCountry(currentCountry)
   }, [countries, index])
 
@@ -26,6 +22,7 @@ const Game = () => {
       {currentCountry ? (
         <>
           <Head
+            questionType={questionType}
             currentCountry={currentCountry}
             points={points}
             lives={lives}
@@ -33,7 +30,13 @@ const Game = () => {
           <div>
             {" "}
             <Question />
-            <Answers lives={lives} currentCountry={currentCountry} />
+            <Answers
+              points={points}
+              setKey={setKey}
+              index={index}
+              questionType={questionType}
+              lives={lives}
+              currentCountry={currentCountry} />
           </div>
         </>
       ) : (

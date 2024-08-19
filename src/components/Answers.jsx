@@ -1,77 +1,54 @@
 import React from 'react'
 import {
-    incrementPoints,
-    incrementCounter,
-    setQuestionType,
     setDisplayDialog,
 } from '../context/slice';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import setLocalStorage from '../utils/helpers/setLocalStorage';
 
-const Answers = ({ currentCountry, lives }) => {
+const Answers = ({ currentCountry, lives, index, setKey, points, questionType }) => {
     const dispatch = useDispatch()
     const {
-        counter,
         countries,
-        questionType,
         leaderboard,
-        points
-    } = useSelector((state) => state.game);
 
+    } = useSelector((state) => state.game);
     //set the current country state
 
     const navigate = useNavigate();
 
-    const answerCountry = () => {
-        dispatch(setQuestionType("country"))
-        dispatch(incrementCounter())
-        const url = new URL(window.location.href);
-
-        url.searchParams.set('index', counter + 1);
-        url.searchParams.set('points', points + 1);
-        url.searchParams.set('lives', lives);
-
-        navigate(`/Game${url.search}`);
-    };
     const answerCapital = () => {
-        dispatch(setQuestionType("capital"))
-
+        localStorage.setItem("questionType", "country")
+        const newIndex = index + 1
+        localStorage.setItem("index", newIndex);
     }
+
+    const answerCountry = () => {
+        localStorage.setItem("questionType", "capital")
+    }
+
     const handleUserChoice = (e) => {
         e.preventDefault();
-        if (parseInt(e.target.name, 10) === counter) {
-            dispatch(incrementPoints());
-            // Versuch, den Query-Parameter zu setzen
-            try {
-                const url = new URL(window.location.href);
-                url.searchParams.set('index', counter);
-                url.searchParams.set('points', points + 1);
 
-                navigate(`/Game${url.search}`);
-                // Optional: Logge die neue URL
-                console.log(`New URL: ${url}`);
-            } catch (error) {
-                console.error('Failed to update URL:', error);
-            }
-            questionType === "country" ? answerCapital() : answerCountry();
-            return;
+        const isAnswerCorrect = parseInt(e.target.name, 10) === index
+
+        if (isAnswerCorrect) {
+            setLocalStorage({ points: points + 1 })
+            questionType === "country" ? answerCountry() : answerCapital()
+        } else {
+            setLocalStorage({ lives: lives - 1 })
         }
-        const hasNoLifes = parseInt(lives, 10) - 1 === 0
-        console.log(hasNoLifes)
-        if (hasNoLifes || counter === countries.length - 1) {
+
+        const isGameOver = parseInt(lives, 10) - 1 === 0 || index === countries.length - 1
+
+        if (isGameOver) {
             const isInHighScore = leaderboard.find(entry => points > entry.points)
-            console.log(isInHighScore)
-            isInHighScore ?
-                dispatch(setDisplayDialog(true)) : navigate("/Leaderboard")
-        }
-        const url = new URL(window.location.href);
-        url.searchParams.set('index', counter);
-        url.searchParams.set('points', points);
-        url.searchParams.set('lives', lives - 1);
-        navigate(`/Game${url.search}`);
-    };
 
+            isInHighScore ? dispatch(setDisplayDialog(true)) : navigate("/Leaderboard")
+        }
+        setKey(prevKey => prevKey + 1);
+    };
     const opps = currentCountry?.opps.map((indexOfCountry, index) => (
         <button
             name={indexOfCountry}
