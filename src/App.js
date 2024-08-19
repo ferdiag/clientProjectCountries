@@ -12,6 +12,7 @@ import {
   setCountries,
   setDisplayDialog,
   setLeaderBoard,
+  setName,
 } from "./context/slice";
 /**
  * Shuffles an array in place.
@@ -24,10 +25,13 @@ import {
  * @returns {JSX.Element} The main component rendering the game.
  */
 function App() {
-  const [name, setName] = useState("player 1");
   const dispatch = useDispatch();
-
   const { displayDialog } = useSelector((state) => state.game);
+
+  useEffect(() => {
+    const name = localStorage.getItem("name");
+    dispatch(setName(name));
+  }, [dispatch]);
 
   useEffect(() => {
     axios
@@ -35,12 +39,11 @@ function App() {
       .then((response) => {
         const { data, leaderboard } = response.data;
         const shuffledArray = shuffleArray(data);
-
         dispatch(setCountries(shuffledArray));
         dispatch(setLeaderBoard(leaderboard));
       })
       .catch((error) => console.error("Fehler beim Abrufen der Daten:", error));
-  }, [dispatch]);
+  }, []);
 
   /**
    * Handles the start button click event.
@@ -55,11 +58,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Game" element={<Game />} />
-          <Route path="/Leaderboard" element={<Leaderboard name={name} />} />
+          <Route path="/Leaderboard" element={<Leaderboard />} />
         </Routes>
-        {displayDialog && (
-          <Dialog setName={setName} name={name} onClose={handleCloseDialog} />
-        )}
+        {displayDialog && <Dialog onClose={handleCloseDialog} />}
       </Router>
     </div>
   );

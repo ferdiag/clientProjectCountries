@@ -5,7 +5,6 @@ const setLocalStorage = ({
   country = undefined,
   questionType = undefined,
 }) => {
-  console.log(questionType);
   country !== undefined && localStorage.setItem("country", country);
   index !== undefined && localStorage.setItem("index", index);
   points !== undefined && localStorage.setItem("points", points);

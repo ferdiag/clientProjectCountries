@@ -4,18 +4,16 @@ import Question from "../components/Question";
 import Answers from "../components/Answers";
 import { useSelector } from "react-redux";
 import { getLocalCountry } from "../utils/helpers/getLocalCountry";
-import getLocalStorage from "../utils/helpers/getLocalStorage";
 
 const Game = () => {
-  const { index, points, lives, country, questionType } = getLocalStorage()
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState(0); // re-render component
 
-  const { countries } = useSelector(state => state.game)
+  const { counter, points, lives, country, questionType, countries } = useSelector(state => state.game)
   const [currentCountry, setCurrentCountry] = useState(null)
   useEffect(() => {
-    const currentCountry = getLocalCountry(countries, index, country)
+    const currentCountry = getLocalCountry(countries, counter, country)
     setCurrentCountry(currentCountry)
-  }, [countries, index])
+  }, [countries, counter])
 
   return (
     <div>
@@ -33,10 +31,11 @@ const Game = () => {
             <Answers
               points={points}
               setKey={setKey}
-              index={index}
+              index={counter}
               questionType={questionType}
               lives={lives}
-              currentCountry={currentCountry} />
+              currentCountry={currentCountry}
+              setCurrentCountry={setCurrentCountry} />
           </div>
         </>
       ) : (

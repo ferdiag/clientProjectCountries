@@ -8,6 +8,7 @@ const initialState = {
   displayDialog: false,
   countries: [], // Du kannst diese Liste initialisieren, wie du möchtest
   leaderboard: [],
+  name: "player 1",
 };
 
 const gameSlice = createSlice({
@@ -32,7 +33,9 @@ const gameSlice = createSlice({
     setCountries: (state, action) => {
       state.countries = action.payload;
     },
-
+    setName: (state, action) => {
+      state.leaderboard = action.payload;
+    },
     setLeaderBoard: (state, action) => {
       state.leaderboard = action.payload;
     },
@@ -48,6 +51,7 @@ export const {
   setCountries,
   setCurrentCountry,
   setLeaderBoard,
+  setName,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

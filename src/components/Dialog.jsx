@@ -1,22 +1,25 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   setDisplayDialog,
+  setName
 } from '../context/slice';
 import axios from "axios";
-const Dialog = ({ name, setName, onClose }) => {
+
+const Dialog = ({ onClose }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { name } = useSelector(state => state.game)
 
   const handleSave = (e) => {
     dispatch(setDisplayDialog(false));
-
+    localStorage.setItem("name", name);
     navigate("/Leaderboard")
   };
 
   const handleChange = (e) => {
-    setName(e.target.value);
+    dispatch(setName(e.target.value))
   };
 
   const handleCloseDialog = (e) => {

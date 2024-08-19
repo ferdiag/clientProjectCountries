@@ -1,13 +1,17 @@
 import React from 'react'
 import {
+    decrementLives,
+    incrementCounter,
+    incrementPoints,
     setDisplayDialog,
+    setQuestionType,
 } from '../context/slice';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import setLocalStorage from '../utils/helpers/setLocalStorage';
+import { shuffleArray } from '../utils/helpers/shuffleArray';
 
-const Answers = ({ currentCountry, lives, index, setKey, points, questionType }) => {
+const Answers = ({ currentCountry, lives, index, setKey, points, questionType, setCurrentCountry }) => {
     const dispatch = useDispatch()
     const {
         countries,
@@ -19,25 +23,28 @@ const Answers = ({ currentCountry, lives, index, setKey, points, questionType })
     const navigate = useNavigate();
 
     const answerCapital = () => {
-        localStorage.setItem("questionType", "country")
+        dispatch(setQuestionType("country"))
         const newIndex = index + 1
-        localStorage.setItem("index", newIndex);
+        dispatch(incrementCounter(newIndex))
     }
 
     const answerCountry = () => {
-        localStorage.setItem("questionType", "capital")
+        dispatch(setQuestionType("capital"))
+
+        const newOpps = shuffleArray(currentCountry.opps)
+        setCurrentCountry(currCountry => ({ ...currCountry, opps: newOpps }))
     }
 
     const handleUserChoice = (e) => {
         e.preventDefault();
 
-        const isAnswerCorrect = parseInt(e.target.name, 10) === index
+        const isAnswerCorrect = parseInt(e.target.name, 10) === index;
 
         if (isAnswerCorrect) {
-            setLocalStorage({ points: points + 1 })
+            dispatch(incrementPoints())
             questionType === "country" ? answerCountry() : answerCapital()
         } else {
-            setLocalStorage({ lives: lives - 1 })
+            dispatch(decrementLives())
         }
 
         const isGameOver = parseInt(lives, 10) - 1 === 0 || index === countries.length - 1

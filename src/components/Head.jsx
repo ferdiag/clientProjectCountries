@@ -2,7 +2,6 @@ import React from 'react'
 import PointsElement from './PointsElement';
 import LivesElement from './LivesElement';
 import Flag from './Flag';
-import { useSelector } from 'react-redux';
 
 const Head = ({ currentCountry, points, lives, questionType }) => {
 
