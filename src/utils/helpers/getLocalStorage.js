@@ -4,7 +4,6 @@ const getLocalStorage = () => {
   const points = parseInt(localStorage.getItem("points")) || 0;
   const lives = parseInt(localStorage.getItem("lives")) || 3;
   const questionType = localStorage.getItem("questionType");
-  console.log(questionType);
   return { index, points, lives, country, questionType };
 };
 

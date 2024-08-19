@@ -1,5 +1,4 @@
 export const getLocalCountry = (countries, counter, coutryLocalstorage) => {
-  console.log(countries, counter, coutryLocalstorage);
   let currentCountryLocal;
   if (countries.length > 0 && counter < countries.length) {
     const country = { ...countries[counter] };
