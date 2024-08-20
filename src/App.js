@@ -39,7 +39,6 @@ function App() {
       .get("http://localhost:3001/")
       .then((response) => {
         const { data, leaderboard } = response.data;
-        console.log(leaderboard);
         const shuffledArray = shuffleArray(data);
         dispatch(setCountries(shuffledArray));
         dispatch(setLeaderBoard(leaderboard));

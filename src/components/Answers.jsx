@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-    decrementLives,
+    setLifes,
     incrementCounter,
-    incrementPoints,
     setDisplayDialog,
     setLeaderBoard,
+    setPoints,
     setQuestionType,
 } from '../context/slice';
 
@@ -28,16 +28,16 @@ import axios from 'axios';
  * @param {string} props.questionType - Der aktuelle Fragetyp ("country" oder "capital").
  * @param {Function} props.setCurrentCountry - Funktion zum Setzen des aktuellen Landes.
  */
-const Answers = ({ currentCountry, lives, index, setKey, points, questionType, setCurrentCountry }) => {
+const Answers = ({ currentCountry, setCurrentCountry, setKey }) => {
     const dispatch = useDispatch();
-    const { countries, leaderboard, name } = useSelector((state) => state.game);
+    const { countries, leaderboard, name, lifes, counter, points, questionType } = useSelector((state) => state.game);
 
     const navigate = useNavigate();
 
     // Logik, um den Fragetyp auf "country" zu setzen und den Zähler zu erhöhen
     const answerCapital = () => {
         dispatch(setQuestionType("country"));
-        const newIndex = index + 1;
+        const newIndex = counter + 1;
         dispatch(incrementCounter(newIndex));
     };
 
@@ -48,34 +48,33 @@ const Answers = ({ currentCountry, lives, index, setKey, points, questionType, s
         const newOpps = shuffleArray(currentCountry.opps);
         setCurrentCountry(currCountry => ({ ...currCountry, opps: newOpps }));
     };
+    // Funktion zum Navigieren und Aktualisieren der Bestenliste
+    const navigateAndGetUpdateHighscore = async () => {
+        try {
+            const res = await axios.post("http://localhost:3001/getAndUpdateLeaderboard", { name, points });
+            dispatch(setLeaderBoard(res.data.leaderboard));
+        } catch (err) {
+            console.log(err, "leaderboard wurde nicht geupdatet");
+        }
 
+        navigate("/Leaderboard");
+    };
     // Verarbeitet die Auswahl des Benutzers
     const handleUserChoice = (e) => {
         e.preventDefault();
 
-        const isAnswerCorrect = parseInt(e.target.name, 10) === index;
-
+        const isAnswerCorrect = parseInt(e.target.name, 10) === counter;
+        console.log(isAnswerCorrect, e.target.name, counter)
         if (isAnswerCorrect) {
-            dispatch(incrementPoints());
+            console.log("punkt + 1")
+            dispatch(setPoints(points + 1));
             questionType === "country" ? answerCountry() : answerCapital();
         } else {
-            dispatch(decrementLives());
+            dispatch(setLifes(lifes - 1));
         }
 
-        // Funktion zum Navigieren und Aktualisieren der Bestenliste
-        const navigateAndGetUpdateHighscore = async () => {
-            try {
-                const res = await axios.post("http://localhost:3001/getAndUpdateLeaderboard", { name, points });
-                dispatch(setLeaderBoard(res.data.leaderboard));
-            } catch (err) {
-                console.log(err, "leaderboard wurde nicht geupdatet");
-            }
-
-            navigate("/Leaderboard");
-        };
-
         // Überprüft, ob das Spiel vorbei ist
-        const isGameOver = parseInt(lives, 10) - 1 === 0 || index === countries.length - 1;
+        const isGameOver = parseInt(lifes, 10) - 1 === 0 || counter === countries.length - 1;
         if (isGameOver) {
             const isInHighScore = leaderboard.length > 0
                 ? leaderboard.find(entry => points > entry.points)

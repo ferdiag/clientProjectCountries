@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 
 const Question = () => {
     const { questionType } = useSelector(state => state.game)
+    console.log(questionType)
     return (
         <div>
             Wie heißt

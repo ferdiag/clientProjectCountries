@@ -23,7 +23,7 @@ const Game = () => {
 
   // Zustand für das aktuelle Land
   const [currentCountry, setCurrentCountry] = useState(null);
-
+  console.log(currentCountry)
   // Effekt-Hook, um das aktuelle Land basierend auf dem Zähler und der Länder-Liste zu setzen
   useEffect(() => {
     const currentCountry = getLocalCountry(countries, counter, country);
@@ -35,12 +35,7 @@ const Game = () => {
       {currentCountry ? (
         <>
           {/* Anzeige des Spielkopfes mit Punkten, Leben und ggf. der Flagge */}
-          <Head
-            questionType={questionType}
-            currentCountry={currentCountry}
-            points={points}
-            lives={lives}
-          />
+          <Head currentCountry={currentCountry} />
           <div>
             {/* Anzeige der Frage */}
             <Question />

@@ -2,7 +2,7 @@ import React from 'react';
 import Button from "../components/Button";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDisplayDialog } from '../context/slice';
+import { setCurrentCountry, setDisplayDialog, setLifes, setPoints } from '../context/slice';
 
 /**
  * Home-Komponente.
@@ -21,6 +21,8 @@ const Home = () => {
     // Funktion zum Starten des Spiels, navigiert zur Spielseite
     const handleStart = (e) => {
         e.preventDefault();
+        dispatch(setPoints(0))
+        dispatch(setLifes(3))
         navigate("/game");
     };
 

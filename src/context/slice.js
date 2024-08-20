@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   points: 0,
-  lives: 3,
+  lifes: 3,
   counter: 0,
   questionType: "country",
   displayDialog: false,
@@ -15,11 +15,12 @@ const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    incrementPoints: (state) => {
-      state.points += 1;
+    setPoints: (state, action) => {
+      state.points = action.payload;
     },
-    decrementLives: (state) => {
-      state.lives -= 1;
+
+    setLifes: (state, action) => {
+      state.lifes = action.payload;
     },
     incrementCounter: (state) => {
       state.counter += 1;
@@ -43,8 +44,8 @@ const gameSlice = createSlice({
 });
 
 export const {
-  incrementPoints,
-  decrementLives,
+  setPoints,
+  setLifes,
   incrementCounter,
   setQuestionType,
   setDisplayDialog,
