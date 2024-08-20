@@ -48,6 +48,7 @@ const Answers = ({ currentCountry, setCurrentCountry, setKey }) => {
         const newOpps = shuffleArray(currentCountry.opps);
         setCurrentCountry(currCountry => ({ ...currCountry, opps: newOpps }));
     };
+
     // Funktion zum Navigieren und Aktualisieren der Bestenliste
     const navigateAndGetUpdateHighscore = async () => {
         try {
@@ -74,7 +75,7 @@ const Answers = ({ currentCountry, setCurrentCountry, setKey }) => {
         }
 
         // Überprüft, ob das Spiel vorbei ist
-        const isGameOver = parseInt(lifes, 10) - 1 === 0 || counter === countries.length - 1;
+        const isGameOver = parseInt(lifes, 10) - 1 === 0 || (counter === countries.length && questionType === "capital")
         if (isGameOver) {
             const isInHighScore = leaderboard.length > 0
                 ? leaderboard.find(entry => points > entry.points)
