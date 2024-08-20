@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import Game from "./pages/Game";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -30,7 +30,8 @@ function App() {
 
   useEffect(() => {
     const name = localStorage.getItem("name");
-    dispatch(setName(name));
+    console.log(name);
+    name && dispatch(setName(name));
   }, [dispatch]);
 
   useEffect(() => {
@@ -38,6 +39,7 @@ function App() {
       .get("http://localhost:3001/")
       .then((response) => {
         const { data, leaderboard } = response.data;
+        console.log(leaderboard);
         const shuffledArray = shuffleArray(data);
         dispatch(setCountries(shuffledArray));
         dispatch(setLeaderBoard(leaderboard));

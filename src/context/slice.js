@@ -34,7 +34,7 @@ const gameSlice = createSlice({
       state.countries = action.payload;
     },
     setName: (state, action) => {
-      state.leaderboard = action.payload;
+      state.name = action.payload;
     },
     setLeaderBoard: (state, action) => {
       state.leaderboard = action.payload;

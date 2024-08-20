@@ -1,27 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import {
   setDisplayDialog,
+  setLeaderBoard,
   setName
 } from '../context/slice';
 import axios from "axios";
 
+/**
+ * Dialog-Komponente.
+ *
+ * Diese Komponente zeigt ein Dialogfeld an, in dem der Benutzer seinen Namen eingeben kann.
+ * Der eingegebene Name wird gespeichert, und die Bestenliste wird aktualisiert.
+ * Die Komponente kann durch Klicken außerhalb des Dialogs geschlossen werden.
+ *
+ * @param {Object} props - Die an die Komponente übergebenen Eigenschaften.
+ * @param {Function} props.onClose - Funktion, die aufgerufen wird, um den Dialog zu schließen.
+ *
+ * @author Ferhat Agostinis
+ */
 const Dialog = ({ onClose }) => {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const { name } = useSelector(state => state.game)
+  const dispatch = useDispatch();
+  const { name, points } = useSelector(state => state.game);
+  const [newName, setNewName] = useState(name);
 
-  const handleSave = (e) => {
+  // Speichert den neuen Namen und aktualisiert die Bestenliste
+  const handleSave = async (e) => {
+    e.preventDefault();
+
+    // Neuen Namen im lokalen Speicher speichern
+    localStorage.setItem("name", newName);
+    dispatch(setName(newName));
+
+    // Bestenliste mit dem neuen Namen und den Punkten aktualisieren
+    const res = await axios.post("http://localhost:3001/getAndUpdateLeaderboard", { name: newName, points });
+    dispatch(setLeaderBoard(res.data.leaderboard));
+
+    // Dialog schließen
     dispatch(setDisplayDialog(false));
-    localStorage.setItem("name", name);
-    navigate("/Leaderboard")
   };
 
+  // Aktualisiert den Zustand für den neuen Namen
   const handleChange = (e) => {
-    dispatch(setName(e.target.value))
+    setNewName(e.target.value);
   };
 
+  // Schließt den Dialog, wenn außerhalb des Dialogfelds geklickt wird
   const handleCloseDialog = (e) => {
     if (e.target.id === "dialog-background") {
       onClose();
@@ -56,7 +80,7 @@ const Dialog = ({ onClose }) => {
         <label>Bitte gib deinen Namen ein</label>
         <input
           onChange={handleChange}
-          value={name}
+          value={newName}
           type="text"
           style={{
             width: "100%",
