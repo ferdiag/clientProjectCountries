@@ -16,6 +16,7 @@ import { getLocalCountry } from "../utils/helpers/getLocalCountry";
  * @author Ferhat Agostinis
  */
 const Game = () => {
+  // eslint-disable-next-line no-unused-vars
   const [key, setKey] = useState(0); // Zustand zur erzwungenen Neurenderung der Komponente
 
   // Zugriff auf den Spielzustand aus dem Redux-Store
@@ -28,6 +29,7 @@ const Game = () => {
   useEffect(() => {
     const currentCountry = getLocalCountry(countries, counter, country);
     setCurrentCountry(currentCountry);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countries, counter]);
 
   return (

@@ -2,7 +2,7 @@ import React from 'react';
 import Button from "../components/Button";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentCountry, setDisplayDialog, setLifes, setPoints } from '../context/slice';
+import { setDisplayDialog, setLifes, setPoints } from '../context/slice';
 
 /**
  * Home-Komponente.

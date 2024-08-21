@@ -44,6 +44,7 @@ function App() {
         dispatch(setLeaderBoard(leaderboard));
       })
       .catch((error) => alert("Fehler beim Abrufen der Daten:", error));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
