@@ -14,7 +14,6 @@ import { useSelector } from 'react-redux';
 const DisplayLeaderboard = () => {
     // Zugriff auf die `leaderboard`-Daten aus dem Redux-Store
     const { leaderboard } = useSelector(state => state.game);
-    console.log(leaderboard);
 
     return (
         <div>

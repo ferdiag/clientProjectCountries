@@ -43,7 +43,7 @@ function App() {
         dispatch(setCountries(shuffledArray));
         dispatch(setLeaderBoard(leaderboard));
       })
-      .catch((error) => console.error("Fehler beim Abrufen der Daten:", error));
+      .catch((error) => alert("Fehler beim Abrufen der Daten:", error));
   }, []);
 
   /**

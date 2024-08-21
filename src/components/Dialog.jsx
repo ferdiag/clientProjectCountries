@@ -33,8 +33,13 @@ const Dialog = ({ onClose }) => {
     dispatch(setName(newName));
 
     // Bestenliste mit dem neuen Namen und den Punkten aktualisieren
-    const res = await axios.post("http://localhost:3001/getAndUpdateLeaderboard", { name: newName, points });
-    dispatch(setLeaderBoard(res.data.leaderboard));
+    try {
+      const res = await axios.post("http://localhost:3001/getAndUpdateLeaderboard", { name: newName, points });
+      res && dispatch(setLeaderBoard(res.data.leaderboard));
+
+    } catch {
+      alert("es gab einen Fehler beim der updating vom Leaderboard")
+    }
 
     // Dialog schließen
     dispatch(setDisplayDialog(false));
